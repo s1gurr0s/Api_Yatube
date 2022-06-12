@@ -1,29 +1,31 @@
-from posts.models import Comment, Group, Post
 from rest_framework import serializers
+
+from posts.models import Comment, Group, Post
 
 
 class GroupSerializer(serializers.ModelSerializer):
     class Meta:
         model = Group
-        fields = ('id', 'title', 'slug')
+        fields = '__all__'
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(read_only=True)
-    group = serializers.SlugRelatedField(
-        queryset=Group.objects.all(),
-        required=False,
-        slug_field='slug'
+    author = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='username'
     )
 
     class Meta:
         model = Post
-        fields = ('id', 'text', 'pub_date', 'author', 'group')
+        fields = '__all__'
 
 
 class CommentSerializer(serializers.ModelSerializer):
-    author = serializers.StringRelatedField(read_only=True)
+    author = serializers.SlugRelatedField(
+        read_only=True,
+        slug_field='username'
+    )
 
     class Meta:
         model = Comment
-        fields = ('id', 'author', 'post', 'text', 'created')
+        fields = '__all__'
